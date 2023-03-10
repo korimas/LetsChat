@@ -88,7 +88,7 @@ export default defineComponent({
 
     Messages.value.push({
       sent: false,
-      text: "你好，我是AI小助手，使用gpt-3.5-turbo模型，欢迎咨询工作相关问题。<br>使用过程中有任何问题可联系：zpzhou@hillstonenet.com"
+      text: "你好，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。<br>使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
     })
 
     function sendMessage() {
