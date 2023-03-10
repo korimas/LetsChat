@@ -87,10 +87,10 @@ export class Request {
             message = `连接出错(${err.response.status})!`;
         }
         // 这里错误消息可以使用全局弹框展示出来
-        // Dialog.create({
-        //   title: "错误",
-        //   message: message
-        // });
+        Dialog.create({
+          title: "错误",
+          message: message
+        });
         // 这里是AxiosError类型，所以一般我们只reject我们需要的响应即可
         return Promise.reject(err.response);
       }
