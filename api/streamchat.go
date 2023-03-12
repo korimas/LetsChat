@@ -8,6 +8,52 @@ import (
 	"net/http"
 )
 
+type Message struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+type ChatRequest struct {
+	Model    string    `json:"model"`
+	Messages []Message `json:"messages"`
+	Stream   bool      `json:"stream"`
+}
+
+type Usage struct {
+	PromptTokens     int `json:"prompt_tokens"`
+	CompletionTokens int `json:"completion_tokens"`
+	TotalTokens      int `json:"total_tokens"`
+}
+
+type Choice struct {
+	Message      Message `json:"message"`
+	FinishReason string  `json:"finish_reason"`
+	Index        int     `json:"index"`
+}
+
+type ErrorResp struct {
+	Type string `json:"type"`
+}
+
+type ChatResponse struct {
+	ID      string    `json:"id"`
+	Object  string    `json:"object"`
+	Created int       `json:"created"`
+	Model   string    `json:"model"`
+	Usage   Usage     `json:"usage"`
+	Choices []Choice  `json:"choices"`
+	Error   ErrorResp `json:"error"`
+}
+
+type APIResponse struct {
+	Success bool        `json:"success"`
+	Result  interface{} `json:"result"`
+	Message string      `json:"message"`
+}
+
+var httpClient = http.Client{}
+var API_KEY = "Bearer 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"
+
 func StreamChatHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		request := ChatRequest{}

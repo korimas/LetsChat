@@ -69,7 +69,6 @@ export class Request {
       data,
       this.baseConfig);
   }
-
 }
 
 // 默认导出Request实例

@@ -5,11 +5,11 @@
 
       <!--聊天内容-->
       <q-scroll-area style="height: calc(100vh - 148px);" ref="scrollAreaRef" @scroll="autoScroll">
-        <div class="row justify-center" >
+        <div class="row justify-center">
           <div style="width: 100%; max-width: 800px;">
             <q-chat-message
               style="white-space: pre-wrap;"
-              v-for="(msg, index) in Messages" :key="index"
+              v-for="(msg, index) in DisplayMessages" :key="index"
               :name='msg.sent ? "Me": "AI"'
               :text=[msg.text]
               :avatar='msg.sent ? meImg: aiImg'
@@ -24,6 +24,14 @@
             >
               <q-spinner-dots size="2rem"/>
             </q-chat-message>
+
+            <q-chat-message
+              style="white-space: pre-wrap;"
+              v-if="Waiting"
+              name="AI"
+              :avatar="aiImg"
+              :text=[waitText]
+            />
 
           </div>
         </div>
@@ -43,7 +51,7 @@
 
           <q-btn
             square
-            @click="sendMessage"
+            @click="StreamChat"
             unelevated
             class="col-12 col-md-2"
             color="secondary"
@@ -59,6 +67,8 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
 import api from "src/api/request";
+import {createParser, ParsedEvent, ReconnectInterval} from 'eventsource-parser'
+
 
 type Message = {
   text: string;
@@ -73,30 +83,127 @@ type GptMessage = {
 export default defineComponent({
   name: 'IndexPage',
   setup() {
-    let Messages = ref<Message[]>([])
+    let DisplayMessages = ref<Message[]>([])
     let InputText = ref('')
+    let waitText = ref('')
     let TotalMessages = ref<GptMessage[]>([])
     let Loading = ref(false)
+    let Waiting = ref(false)
 
     const scrollAreaRef = ref()
 
-    let scrollSize = 0
+    let scrollSize = -1
     let scrollPercent = 1
+    let scrollPos = 0
+    let bottom = true
 
     const meImg = './imgs/me.jpg'
     const aiImg = './imgs/ai.png'
 
-    Messages.value.push({
+    DisplayMessages.value.push({
       sent: false,
       text: "你好，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。<br>使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
     })
+
+    function StreamChat() {
+      if (InputText.value == "") {
+        return
+      }
+
+      DisplayMessages.value.push({
+        sent: true,
+        text: InputText.value
+      })
+
+      TotalMessages.value.push({
+        role: "user",
+        content: InputText.value
+      })
+      InputText.value = ""
+      Loading.value = true
+      waitText.value = ""
+
+      // 流式聊天
+      fetch('/api/streamchat', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          "model": "gpt-3.5-turbo",
+          "messages": TotalMessages.value
+        })
+      }).then((response) => {
+        const reader = response.body!.getReader();
+        const decoder = new TextDecoder();
+        const encoder = new TextEncoder()
+        let closed = false
+
+        const stream = new ReadableStream({
+          start(controller) {
+            const streamParser = (event: ParsedEvent | ReconnectInterval) => {
+              if (event.type === 'event') {
+                const data = event.data
+                if (data === '[DONE]') {
+                  controller.close()
+                  closed = true
+                  return
+                }
+
+                try {
+                  const json = JSON.parse(data)
+                  const text = json.choices[0].delta?.content || ''
+                  waitText.value = waitText.value + text
+                  const queue = encoder.encode(text)
+                  controller.enqueue(queue)
+                } catch (e) {
+                  controller.error(e)
+                }
+              }
+            }
+
+            const parser = createParser(streamParser)
+            Loading.value = false
+            Waiting.value = true
+
+            function parse() {
+              reader.read().then(({value, done}) => {
+                if (done) {
+                  if (!closed) {
+                    controller.close()
+                  }
+                  Waiting.value = false
+                  TotalMessages.value?.push({
+                    role: "assistant",
+                    content: waitText.value
+                  })
+
+                  DisplayMessages.value.push({
+                    sent: false,
+                    text: waitText.value
+                  })
+                  return
+                }
+                const text = decoder.decode(value);
+                parser.feed(text);
+                parse()
+              });
+            }
+
+            parse()
+          }
+        });
+      })
+
+      // add
+    }
 
     function sendMessage() {
       if (InputText.value == "") {
         return
       }
 
-      Messages.value.push({
+      DisplayMessages.value.push({
         sent: true,
         text: InputText.value
       })
@@ -115,9 +222,8 @@ export default defineComponent({
         Loading.value = false
 
         // 检查出错
-        console.log(response.data.result.error.type)
         if (response.data.result.error.type != "") {
-          Messages.value.push({
+          DisplayMessages.value.push({
             sent: false,
             text: "抱歉，OpenAI服务器繁忙，错误：" + response.data.result["error"]["type"]
           })
@@ -130,7 +236,7 @@ export default defineComponent({
             content: respMessage
           })
 
-          Messages.value.push({
+          DisplayMessages.value.push({
             sent: false,
             text: respMessage
           })
@@ -139,35 +245,44 @@ export default defineComponent({
     }
 
     function scrollToBottom() {
-      scrollAreaRef.value.setScrollPercentage( 'vertical', 1 )
+      scrollAreaRef.value.setScrollPercentage('vertical', 1)
     }
 
     function autoScroll() {
       const scroller = scrollAreaRef.value.getScroll()
-      if (scrollSize != scroller.verticalSize) {
-        // 滚动区域发生变化，判断之前是否在最底下
-        if (scrollPercent === 1) {
-          scrollToBottom()
-        }
+      if (scroller.verticalPosition < scrollPos) {
+        bottom = false
       }
+
+      if (scroller.verticalPercentage == 1) {
+        bottom = true
+      }
+
+      if (bottom) {
+        scrollToBottom()
+      }
+
       scrollSize = scroller.verticalSize
-      scrollPercent = scroller.verticalPercentage
+      scrollPos = scroller.verticalPosition
     }
 
     function handleEnter(e: any) {
       if (e.ctrlKey) {
-        sendMessage()
+        StreamChat()
       }
     }
 
     return {
       handleEnter,
       sendMessage,
+      StreamChat,
       autoScroll,
       scrollAreaRef,
       InputText,
-      Messages,
+      waitText,
+      DisplayMessages,
       Loading,
+      Waiting,
       meImg,
       aiImg
     }
