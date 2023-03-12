@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 )
 
 type Message struct {
@@ -52,7 +53,7 @@ type APIResponse struct {
 }
 
 var httpClient = http.Client{}
-var API_KEY = "Bearer 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"
+var API_KEY = "Bearer " + os.Getenv("API_KEY")
 
 func StreamChatHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
