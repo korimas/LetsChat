@@ -1,8 +1,8 @@
 {
     "outputDirectory": "dist",
     "functions": {
-        "api/*.py": {
-            "excludeFiles": "node_modules"
+        "api/**/*.py": {
+            "excludeFiles": "{+(.now|.next|_next|node_modules|public|assets|src)/**,yarn.lock,README.md,*.js}"
         }
     }
 }
