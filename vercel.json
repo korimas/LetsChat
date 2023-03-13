@@ -2,7 +2,7 @@
     "outputDirectory": "dist",
     "functions": {
         "api/**/*.py": {
-            "excludeFiles": "{+(.now|.next|_next|node_modules|public|assets|src)/**,yarn.lock,README.md,*.js}"
+            "excludeFiles": "{+(.now|.next|_next|node_modules|public|assets|src|dist)/**,yarn.lock,README.md,*.js}"
         }
     }
 }
