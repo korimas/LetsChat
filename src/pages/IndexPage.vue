@@ -144,21 +144,25 @@ export default defineComponent({
             const streamParser = (event: ParsedEvent | ReconnectInterval) => {
               if (event.type === 'event') {
                 const data = event.data
+                console.log(data)
                 if (data === '[DONE]') {
                   controller.close()
                   closed = true
                   return
                 }
 
-                try {
-                  const json = JSON.parse(data)
-                  const text = json.choices[0].delta?.content || ''
-                  waitText.value = waitText.value + text
-                  const queue = encoder.encode(text)
-                  controller.enqueue(queue)
-                } catch (e) {
-                  controller.error(e)
+                if (data !== '[WAIT]') {
+                  try {
+                    const json = JSON.parse(data)
+                    const text = json.choices[0].delta?.content || ''
+                    waitText.value = waitText.value + text
+                    const queue = encoder.encode(text)
+                    controller.enqueue(queue)
+                  } catch (e) {
+                    controller.error(e)
+                  }
                 }
+
               }
             }
 
