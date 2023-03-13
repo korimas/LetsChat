@@ -1,3 +1,8 @@
 {
-  "outputDirectory": "dist"
+    "outputDirectory": "dist",
+    "functions": {
+        "api/**/*.py": {
+            "excludeFiles": "public/**"
+        }
+    }
 }
