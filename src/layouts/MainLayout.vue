@@ -3,9 +3,10 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          LetChat
+          Let'sChat
         </q-toolbar-title>
       </q-toolbar>
+        by zpzhou
     </q-header>
 
     <q-page-container>
