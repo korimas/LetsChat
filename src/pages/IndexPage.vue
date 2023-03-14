@@ -14,7 +14,6 @@
                             :text=[msg.text]
                             :avatar='msg.sent ? meImg: aiImg'
                             :sent=msg.sent
-                            text-html
                         />
 
                         <q-chat-message
