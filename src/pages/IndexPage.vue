@@ -55,7 +55,7 @@
                         class="col-2"
                         color="secondary"
                     >
-                        <div>发送(Ctrl+Enter)</div>
+                        <div>发送</div>
                     </q-btn>
                 </div>
             </div>
@@ -184,8 +184,10 @@ export default defineComponent({
         }
 
         function handleEnter(e: any) {
-            if (e.ctrlKey) {
+            if (!e.ctrlKey) {
                 StreamChat()
+            } else {
+                InputText.value = InputText.value + "\n"
             }
         }
 
