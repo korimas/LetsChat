@@ -27,3 +27,4 @@ class Handler(BaseHTTPRequestHandler):
         with requests.post(url, stream=True, headers=headers, data=post_body) as response:
             for chunk in response.iter_content(chunk_size=512):
                 self.wfile.write(chunk)
+                self.wfile.flush()
