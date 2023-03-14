@@ -21,6 +21,9 @@ class Handler(BaseHTTPRequestHandler):
             'Authorization': 'Bearer ' + os.getenv("OPENAI_API_KEY")
         }
 
-        with requests.post(url, stream=True, headers=headers, data=post_body) as response:
-            for chunk in response.iter_content(chunk_size=512):
-                self.wfile.write(chunk)
+        requests.post(url, stream=True, headers=headers, data=post_body)
+        self.wfile.write(b'{"hello":"world"}')
+
+#         with requests.post(url, stream=True, headers=headers, data=post_body) as response:
+#             for chunk in response.iter_content(chunk_size=512):
+#                 self.wfile.write(chunk)
