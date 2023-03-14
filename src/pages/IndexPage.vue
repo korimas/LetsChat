@@ -97,11 +97,11 @@ export default defineComponent({
 
         DisplayMessages.value.push({
             sent: false,
-            text: "Welcome，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。"
+            text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。"
         })
         DisplayMessages.value.push({
             sent:false,
-            text: "向聊天框发送信息即可与我聊天"
+            text: "向聊天框发送信息即可与我聊天，我可以回答问题，写代码、写文章等等"
         })
         DisplayMessages.value.push({
             sent:false,
