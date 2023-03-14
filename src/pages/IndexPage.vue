@@ -46,7 +46,7 @@
                         @keydown.enter="handleEnter"
                         filled autogrow bg-color="grey"
                         v-model="InputText"
-                        label="向OpenAI提问"/>
+                    />
 
                     <q-btn
                         square
@@ -97,9 +97,12 @@ export default defineComponent({
 
         DisplayMessages.value.push({
             sent: false,
-            text: "你好，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。"
+            text: "Welcome，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。"
         })
-
+        DisplayMessages.value.push({
+            sent:false,
+            text: "向聊天框发送信息即可与我聊天"
+        })
         DisplayMessages.value.push({
             sent:false,
             text: "使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
