@@ -5,8 +5,9 @@
         <q-toolbar-title>
           Let'sChat
         </q-toolbar-title>
+          by zpzhou
       </q-toolbar>
-        by zpzhou
+
     </q-header>
 
     <q-page-container>

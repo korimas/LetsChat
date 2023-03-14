@@ -41,7 +41,7 @@
                 <div class="row justify-center" style="width: 100%; max-width: 800px">
                     <q-input
                         square
-                        class="col-12 col-md-10"
+                        class="col-10"
                         :disable="Loading"
                         @keydown.enter="handleEnter"
                         filled autogrow bg-color="grey"
@@ -52,7 +52,7 @@
                         square
                         @click="StreamChat"
                         unelevated
-                        class="col-12 col-md-2"
+                        class="col-2"
                         color="secondary"
                     >
                         <div>发送(Ctrl+Enter)</div>
@@ -97,7 +97,12 @@ export default defineComponent({
 
         DisplayMessages.value.push({
             sent: false,
-            text: "你好，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。<br>使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
+            text: "你好，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。"
+        })
+
+        DisplayMessages.value.push({
+            sent:false,
+            text: "使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
         })
 
         async function StreamChat() {
