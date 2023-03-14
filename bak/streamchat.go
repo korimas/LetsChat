@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
-	"sync"
-	"time"
+	"os"
 )
 
 type Message struct {
@@ -54,16 +54,14 @@ type APIResponse struct {
 
 var httpClient = http.Client{}
 
-// var API_KEY = "Bearer " + os.Getenv("API_KEY")
-var API_KEY = "Bearer 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"
+var API_KEY = "Bearer " + os.Getenv("OPENAI_API_KEY")
+
+// var API_KEY = "Bearer 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"
 var doneSequence = []byte("[DONE]")
 var waitSequence = []byte("data: [WAIT]")
 
 func StreamChatHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		var mutex sync.Mutex
-		received := false
-
 		request := ChatRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
@@ -98,46 +96,15 @@ func StreamChatHandler(w http.ResponseWriter, r *http.Request) {
 		reader := bufio.NewReader(resp.Body)
 		defer resp.Body.Close()
 
-		// diff way
-		go func() {
-			for {
-				mutex.Lock()
-				if !received {
-					w.Write(waitSequence)
-				} else {
-					mutex.Unlock()
-					return
-				}
-				mutex.Unlock()
-				time.Sleep(time.Second * 3)
-			}
-		}()
-
-		for {
-			line, err := reader.ReadBytes('\n')
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			if !received {
-				mutex.Lock()
-				received = true
-				mutex.Unlock()
-			}
-
-			w.Write(line)
-
-			if bytes.HasPrefix(line, doneSequence) {
-				break
-			}
+		_, err = io.Copy(w, reader)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		//_, err = io.Copy(w, reader)
-		//if err != nil {
-		//	http.Error(w, err.Error(), http.StatusInternalServerError)
-		//	return
-		//}
+		if flusher, ok := w.(http.Flusher); ok {
+			flusher.Flush()
+		}
 
 		return
 
