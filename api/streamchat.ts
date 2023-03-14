@@ -1,8 +1,4 @@
-import {
-    createParser,
-    ParsedEvent,
-    ReconnectInterval,
-} from "eventsource-parser";
+import {createParser, ParsedEvent, ReconnectInterval,} from "eventsource-parser";
 
 if (!process.env.OPENAI_API_KEY) {
     throw new Error("Missing env var from OpenAI");

@@ -105,7 +105,8 @@ export default defineComponent({
             text: "你好，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。<br>使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
         })
 
-        function StreamChat() {
+        async function StreamChat() {
+            console.log("async stream chat")
             if (InputText.value == "") {
                 return
             }
@@ -124,7 +125,7 @@ export default defineComponent({
             waitText.value = ""
 
             // 流式聊天
-            fetch('/api/streamchat', {
+            const response = await fetch('/api/streamchat', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -132,75 +133,26 @@ export default defineComponent({
                 body: JSON.stringify({
                     "model": "gpt-3.5-turbo",
                     "messages": TotalMessages.value,
-                    "stream": true
+                    "stream": true,
+                    "temperature": 0.7,
                 })
-            }).then((response) => {
-                const reader = response.body!.getReader();
-                const decoder = new TextDecoder();
-                const encoder = new TextEncoder()
-                let closed = false
-
-                const stream = new ReadableStream({
-                    start(controller) {
-                        const streamParser = (event: ParsedEvent | ReconnectInterval) => {
-                            if (event.type === 'event') {
-                                const data = event.data
-                                console.log(data)
-                                if (data === '[DONE]') {
-                                    controller.close()
-                                    closed = true
-                                    return
-                                }
-
-                                if (data !== '[WAIT]') {
-                                    try {
-                                        const json = JSON.parse(data)
-                                        const text = json.choices[0].delta?.content || ''
-                                        waitText.value = waitText.value + text
-                                        const queue = encoder.encode(text)
-                                        controller.enqueue(queue)
-                                    } catch (e) {
-                                        controller.error(e)
-                                    }
-                                }
-
-                            }
-                        }
-
-                        const parser = createParser(streamParser)
-                        Loading.value = false
-                        Waiting.value = true
-
-                        function parse() {
-                            reader.read().then(({value, done}) => {
-                                if (done) {
-                                    if (!closed) {
-                                        controller.close()
-                                    }
-                                    Waiting.value = false
-                                    TotalMessages.value?.push({
-                                        role: "assistant",
-                                        content: waitText.value
-                                    })
-
-                                    DisplayMessages.value.push({
-                                        sent: false,
-                                        text: waitText.value
-                                    })
-                                    return
-                                }
-                                const text = decoder.decode(value);
-                                parser.feed(text);
-                                parse()
-                            });
-                        }
-
-                        parse()
-                    }
-                });
             })
 
-            // add
+            const reader = response.body!.getReader()
+            const decoder = new TextDecoder('utf-8')
+
+            while (true) {
+                console.log("await read")
+                const {value, done} = await reader.read()
+                if (value) {
+                    let text = decoder.decode(value)
+                    console.log(text)
+                }
+
+                if (done) {
+                    break
+                }
+            }
         }
 
         function sendMessage() {
