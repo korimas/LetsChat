@@ -66,9 +66,6 @@
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
-import api from "src/api/request";
-import {createParser, ParsedEvent, ReconnectInterval} from 'eventsource-parser'
-
 
 type Message = {
     text: string;
@@ -165,52 +162,6 @@ export default defineComponent({
             }
         }
 
-        function sendMessage() {
-            if (InputText.value == "") {
-                return
-            }
-
-            DisplayMessages.value.push({
-                sent: true,
-                text: InputText.value
-            })
-
-            TotalMessages.value.push({
-                role: "user",
-                content: InputText.value
-            })
-            InputText.value = ""
-
-            Loading.value = true
-            api.SendMessage({
-                "model": "gpt-3.5-turbo",
-                "messages": TotalMessages.value
-            }).then(response => {
-                Loading.value = false
-
-                // 检查出错
-                if (response.data.result.error.type != "") {
-                    DisplayMessages.value.push({
-                        sent: false,
-                        text: "抱歉，OpenAI服务器繁忙，错误：" + response.data.result["error"]["type"]
-                    })
-                    TotalMessages.value.pop()
-
-                } else {
-                    let respMessage = response.data.result.choices[0]["message"]["content"]
-                    TotalMessages.value?.push({
-                        role: "assistant",
-                        content: respMessage
-                    })
-
-                    DisplayMessages.value.push({
-                        sent: false,
-                        text: respMessage
-                    })
-                }
-            })
-        }
-
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
             if (scroller.verticalPosition < scrollPos) {
@@ -237,7 +188,6 @@ export default defineComponent({
 
         return {
             handleEnter,
-            sendMessage,
             StreamChat,
             autoScroll,
             scrollAreaRef,
