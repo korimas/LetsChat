@@ -90,7 +90,6 @@ export default defineComponent({
         const scrollAreaRef = ref()
 
         let scrollSize = -1
-        let scrollPercent = 1
         let scrollPos = 0
         let bottom = true
 
