@@ -121,10 +121,10 @@ export default defineComponent({
                 content: InputText.value
             })
             InputText.value = ""
-            Loading.value = true
             waitText.value = ""
 
             // 流式聊天
+            Loading.value = true
             const response = await fetch('/api/streamchat', {
                 method: 'POST',
                 headers: {
@@ -144,12 +144,25 @@ export default defineComponent({
             while (true) {
                 console.log("await read")
                 const {value, done} = await reader.read()
+                Loading.value = false
+                Waiting.value = true
+
                 if (value) {
                     let text = decoder.decode(value)
                     console.log(text)
+                    waitText.value = waitText.value + text
                 }
 
                 if (done) {
+                    Waiting.value = false
+                    TotalMessages.value?.push({
+                        role: "assistant",
+                        content: waitText.value
+                    })
+                    DisplayMessages.value.push({
+                        sent: false,
+                        text: waitText.value
+                    })
                     break
                 }
             }
