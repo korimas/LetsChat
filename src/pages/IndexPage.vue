@@ -124,6 +124,7 @@ export default defineComponent({
             })
             InputText.value = ""
             waitText.value = ""
+            scrollBottom()
 
             // 流式聊天
             Loading.value = true
@@ -168,6 +169,11 @@ export default defineComponent({
             }
         }
 
+        function scrollBottom() {
+            scrollAreaRef.value.setScrollPercentage('vertical', 1)
+            bottom = true
+        }
+
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
             if (scroller.verticalPosition < scrollPos) {
@@ -179,7 +185,7 @@ export default defineComponent({
             }
 
             if (bottom) {
-                scrollAreaRef.value.setScrollPercentage('vertical', 1)
+                scrollBottom()
             }
 
             scrollSize = scroller.verticalSize
