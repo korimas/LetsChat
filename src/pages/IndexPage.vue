@@ -42,7 +42,7 @@
                     <q-input
                         square
                         class="col-10"
-                        :disable="Loading"
+                        :disable="Loading || Waiting"
                         @keydown.enter="handleEnter"
                         filled autogrow bg-color="grey"
                         v-model="InputText"
