@@ -106,7 +106,6 @@ export default defineComponent({
         })
 
         async function StreamChat() {
-            console.log("async stream chat")
             if (InputText.value == "") {
                 return
             }
@@ -142,14 +141,12 @@ export default defineComponent({
             const decoder = new TextDecoder('utf-8')
 
             while (true) {
-                console.log("await read")
                 const {value, done} = await reader.read()
                 Loading.value = false
                 Waiting.value = true
 
                 if (value) {
                     let text = decoder.decode(value)
-                    console.log(text)
                     waitText.value = waitText.value + text
                 }
 
@@ -214,10 +211,6 @@ export default defineComponent({
             })
         }
 
-        function scrollToBottom() {
-            scrollAreaRef.value.setScrollPercentage('vertical', 1)
-        }
-
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
             if (scroller.verticalPosition < scrollPos) {
@@ -229,7 +222,7 @@ export default defineComponent({
             }
 
             if (bottom) {
-                scrollToBottom()
+                scrollAreaRef.value.setScrollPercentage('vertical', 1)
             }
 
             scrollSize = scroller.verticalSize
