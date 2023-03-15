@@ -171,7 +171,8 @@ export default defineComponent({
             const response = await fetch('/api/streamchat', {
                 method: 'POST',
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    'Authorization': 'Bearer ' + Password.value
                 },
                 body: JSON.stringify({
                     "model": "gpt-3.5-turbo",
