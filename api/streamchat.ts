@@ -100,7 +100,7 @@ const handler = async (req: Request): Promise<Response> => {
     */
     const messageLength = payload.messages.length
     if (messageLength > 10){
-        payload.messages = payload.messages.slice(messageLength-10)
+        payload.messages = payload.messages.slice(messageLength-10);
     }
 
     const stream = await OpenAIStream(payload);
