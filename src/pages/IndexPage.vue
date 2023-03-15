@@ -1,7 +1,7 @@
 <template>
     <q-page style="min-height: 0;">
 
-        <div class="q-pa-md column no-wrap">
+        <div class="q-pa-md column no-wrap" v-if="AuthFinish">
 
             <!--聊天内容-->
             <q-scroll-area style="height: calc(100vh - 148px);" ref="scrollAreaRef" @scroll="autoScroll">
@@ -59,6 +59,8 @@
                     </q-btn>
                 </div>
             </div>
+
+            <!--密码-->
         </div>
     </q-page>
 </template>
@@ -86,6 +88,7 @@ export default defineComponent({
         let TotalMessages = ref<GptMessage[]>([])
         let Loading = ref(false)
         let Waiting = ref(false)
+        let AuthFinish = ref(true)
 
         const scrollAreaRef = ref()
 
@@ -110,7 +113,7 @@ export default defineComponent({
         })
 
         checkAuth()
-        
+
         function checkAuth() {
             api.CheckNeedAuth().then(response => {
                 if (response.data.authRequire) {
@@ -225,6 +228,7 @@ export default defineComponent({
             DisplayMessages,
             Loading,
             Waiting,
+            AuthFinish,
             meImg,
             aiImg
         }

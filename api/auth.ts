@@ -7,7 +7,10 @@ const handler = async (req: Request): Promise<Response> => {
     if (process.env.PASSWORD) {
         auth = true;
     }
-    return new Response(`{"authRequire": ${auth}}`);
+    return new Response(JSON.stringify({
+        success:true,
+        result:{authRequire: auth}
+    }));
 };
 
 export default handler;
