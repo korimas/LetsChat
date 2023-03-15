@@ -181,6 +181,7 @@ export default defineComponent({
                 bottom = false
             } else {
                 if (!bottom) {
+                    console.log(scroller.verticalPercentage)
                     if (scroller.verticalPercentage == 1) {
                         bottom = true
                     }
