@@ -9,6 +9,7 @@
 
                 <q-card-section class="q-pt-none">
                     <q-input dense v-model="Password" autofocus @keyup.enter="Auth" />
+                    <p class="text-grey text-right">提示：我的公司名</p>
                 </q-card-section>
 
                 <q-card-actions align="right" class="text-primary">
