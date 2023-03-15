@@ -85,6 +85,7 @@ async function OpenAIStream(payload: OpenAIStreamPayload) {
 
 const handler = async (req: Request): Promise<Response> => {
     const payload = await req.json()
+    const token = req.headers.get("Authorization")
     /*
     const payload: OpenAIStreamPayload = {
         model: "gpt-3.5-turbo",
@@ -98,6 +99,14 @@ const handler = async (req: Request): Promise<Response> => {
         n: 1,
     };
     */
+
+    if (token != "Bearer " + process.env.PASSWORD) {
+        return new Response(JSON.stringify({
+            success:false,
+            message: "认证失败！"
+        }));
+    }
+
     const messageLength = payload.messages.length
     if (messageLength > 7){
         payload.messages = payload.messages.slice(messageLength-7);
