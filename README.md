@@ -9,4 +9,4 @@ Demo地址：[https://chat.zpzhou.com](https://chat.zpzhou.com)
 
 # 环境变量：
 部署后需要配置环境变量：
-* OPENAI_API_KEY：在自己账户生成的openai api key
+* OPENAI_API_KEY：在OpenAI账户生成的api key
