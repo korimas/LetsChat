@@ -63,10 +63,9 @@ export class Request {
   }
 
   // 发送聊天信息
-  public SendMessage(data: any) {
-    return this.instance.post(
-      "/chat",
-      data,
+  public CheckNeedAuth() {
+    return this.instance.get(
+      "/auth",
       this.baseConfig);
   }
 }

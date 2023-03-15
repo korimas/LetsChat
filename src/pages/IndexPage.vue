@@ -65,6 +65,7 @@
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
+import api from 'src/api/request'
 
 type Message = {
     text: string;
@@ -107,6 +108,16 @@ export default defineComponent({
             sent: false,
             text: "使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
         })
+
+        checkAuth()
+        
+        function checkAuth() {
+            api.CheckNeedAuth().then(response => {
+                if (response.data.authRequire) {
+                    console.log("need auth")
+                }
+            })
+        }
 
         async function StreamChat() {
             if (InputText.value == "") {
