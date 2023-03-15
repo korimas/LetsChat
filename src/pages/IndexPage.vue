@@ -132,8 +132,8 @@ export default defineComponent({
 
         function checkAuth() {
             api.CheckNeedAuth().then(response => {
-                // AuthRequire.value = response.data.result.authRequire
-                AuthRequire.value = true
+                AuthRequire.value = response.data.result.authRequire
+                // AuthRequire.value = true
 
                 AuthFinish.value = !AuthRequire.value
             })
