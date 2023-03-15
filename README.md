@@ -1,41 +1,12 @@
-# letschat (letschat)
+# 介绍
 
-Let's chat
+Let's chat是一个后端接入OpenAI API的网页版聊天机器人，使用vercel提供的serverless服务部署。
 
-## Install the dependencies
-```bash
-yarn
-# or
-npm install
-```
+前端框架使用Quasar。
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
+Demo地址：[https://chat.zpzhou.com](https://chat.zpzhou.com)
 
 
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
-```
-
-
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js).
+# 环境变量：
+部署后需要配置环境变量：
+* OPENAI_API_KEY：在自己账户生成的openai api key
