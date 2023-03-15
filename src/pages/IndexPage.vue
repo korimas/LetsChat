@@ -1,5 +1,21 @@
 <template>
     <q-page style="min-height: 0;">
+        <!--密码认证-->
+        <q-dialog v-model="AuthRequire" persistent>
+            <q-card style="min-width: 350px">
+                <q-card-section>
+                    <div class="text-h6">请输入密码</div>
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                    <q-input dense v-model="Password" autofocus @keyup.enter="Auth" />
+                </q-card-section>
+
+                <q-card-actions align="right" class="text-primary">
+                    <q-btn flat label="确定" @click="Auth"/>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
 
         <div class="q-pa-md column no-wrap" v-if="AuthFinish">
 
@@ -37,7 +53,7 @@
             </q-scroll-area>
 
             <!--输入框-->
-            <div class="row justify-center">
+            <div class="row justify-center" >
                 <div class="row justify-center" style="width: 100%; max-width: 800px">
                     <q-input
                         square
@@ -59,8 +75,6 @@
                     </q-btn>
                 </div>
             </div>
-
-            <!--密码-->
         </div>
     </q-page>
 </template>
@@ -88,7 +102,9 @@ export default defineComponent({
         let TotalMessages = ref<GptMessage[]>([])
         let Loading = ref(false)
         let Waiting = ref(false)
-        let AuthFinish = ref(true)
+        let AuthFinish = ref(false)
+        let AuthRequire = ref(true)
+        let Password = ref('')
 
         const scrollAreaRef = ref()
 
@@ -116,8 +132,18 @@ export default defineComponent({
 
         function checkAuth() {
             api.CheckNeedAuth().then(response => {
-                if (response.data.authRequire) {
-                    console.log("need auth")
+                // AuthRequire.value = response.data.result.authRequire
+                AuthRequire.value = true
+
+                AuthFinish.value = !AuthRequire.value
+            })
+        }
+
+        function Auth() {
+            api.PasswordAuth(Password.value).then(response => {
+                if (response.data.success){
+                    AuthFinish.value = true
+                    AuthRequire.value = false
                 }
             })
         }
@@ -225,10 +251,13 @@ export default defineComponent({
             scrollAreaRef,
             InputText,
             waitText,
+            Password,
             DisplayMessages,
             Loading,
             Waiting,
             AuthFinish,
+            AuthRequire,
+            Auth,
             meImg,
             aiImg
         }

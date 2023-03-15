@@ -62,12 +62,19 @@ export class Request {
     return this.instance.request(config);
   }
 
-  // 发送聊天信息
   public CheckNeedAuth() {
     return this.instance.get(
       "/auth",
       this.baseConfig);
   }
+
+  public PasswordAuth(password: string) {
+      return this.instance.post(
+          "/auth",
+          {password: password},
+          this.baseConfig);
+  }
+
 }
 
 // 默认导出Request实例
