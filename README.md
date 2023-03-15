@@ -4,6 +4,8 @@ Let's chat是一个后端接入OpenAI API的网页版聊天机器人，使用ver
 
 前端框架使用Quasar。
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fkorimas%2FLetsChat&env=OPENAI_API_KEY)
+
 Demo地址：[https://chat.zpzhou.com](https://chat.zpzhou.com)
 
 
