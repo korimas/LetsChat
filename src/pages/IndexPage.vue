@@ -100,11 +100,11 @@ export default defineComponent({
             text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。"
         })
         DisplayMessages.value.push({
-            sent:false,
+            sent: false,
             text: "向聊天框发送信息即可与我聊天，我可以回答问题，写代码、写文章等等"
         })
         DisplayMessages.value.push({
-            sent:false,
+            sent: false,
             text: "使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
         })
 
@@ -176,12 +176,15 @@ export default defineComponent({
 
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
+
             if (scroller.verticalPosition < scrollPos) {
                 bottom = false
-            }
-
-            if (scroller.verticalPercentage == 1) {
-                bottom = true
+            } else {
+                if (!bottom) {
+                    if (scroller.verticalPercentage == 1) {
+                        bottom = true
+                    }
+                }
             }
 
             if (bottom) {
