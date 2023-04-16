@@ -209,9 +209,8 @@ export default defineComponent({
                         sent: false,
                         text: waitText.value
                     })
-                    await nextTick(() => {
-                        inputCom.value.focus()
-                    });
+                    await nextTick()
+                    inputCom.value.focus()
                     break
                 }
             }
