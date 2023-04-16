@@ -9,7 +9,7 @@
 
                 <q-card-section class="q-pt-none">
                     <q-input dense type="password" v-model="Password" autofocus @keyup.enter="Auth" />
-                    <p class="text-grey text-right">提示：我的公司名</p>
+                    <p class="text-grey text-right">Note: My company name.</p>
                 </q-card-section>
 
                 <q-card-actions align="right" class="text-primary">
@@ -224,15 +224,25 @@ export default defineComponent({
 
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
+            let need_check = true
 
-            if (scroller.verticalPosition - scrollPos > 20) {
-                bottom = false
+            if (Waiting.value) {
+                // 接收中
+                if (scroller.verticalPosition - scrollPos > 20) {
+                    bottom = false
+                    need_check = false
+                }
             } else {
-                if (!bottom) {
-                    console.log(scroller.verticalPercentage)
-                    if (scroller.verticalPercentage == 1) {
-                        bottom = true
-                    }
+                // 不在接收中
+                if (scroller.verticalPosition - scrollPos > 0) {
+                    bottom = false
+                    need_check = false
+                }
+            }
+
+            if(need_check && !bottom) {
+                if (scroller.verticalPercentage == 1) {
+                    bottom = true
                 }
             }
 
