@@ -224,33 +224,17 @@ export default defineComponent({
 
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
-            let need_check = true
 
             if (Waiting.value) {
-                // 接收中
-                if (scroller.verticalPosition - scrollPos > 20) {
-                    bottom = false
-                    need_check = false
-                }
-            } else {
-                // 不在接收中
-                if (scroller.verticalPosition - scrollPos > 0) {
-                    bottom = false
-                    need_check = false
+                console.log("verticalPosition: " + scroller.verticalPosition)
+                console.log("pre verticalPosition: " + scroller.verticalPosition)
+                console.log("verticalPercentage: " + scroller.verticalPercentage)
+                console.log("verticalSize: " + scroller.verticalSize)
+                console.log()
+                if (scroller.verticalPosition - scrollPos < 20) {
+                    scrollBottom()
                 }
             }
-
-            if(need_check && !bottom) {
-                if (scroller.verticalPercentage == 1) {
-                    bottom = true
-                }
-            }
-
-            if (bottom) {
-                scrollBottom()
-            }
-
-            scrollSize = scroller.verticalSize
             scrollPos = scroller.verticalPosition
         }
 
