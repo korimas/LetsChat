@@ -232,6 +232,7 @@ export default defineComponent({
             console.log("---------------------------------------------------------")
 
             if (Math.abs(scroller.verticalPosition - scrollPos) < 25) {
+                console.log("enter: " + (scroller.verticalPosition - scrollPos))
                 scrollBottom()
             }
 
