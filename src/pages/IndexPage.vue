@@ -57,8 +57,10 @@
             <div class="row justify-center" >
                 <div class="row justify-center" style="width: 100%; max-width: 800px">
                     <q-input
+                        ref="inputCom"
                         square
                         class="col-10"
+                        :disable="Loading || Waiting"
                         @keydown.enter="handleEnter"
                         filled autogrow bg-color="grey"
                         v-model="InputText"
@@ -82,6 +84,7 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
 import api from 'src/api/request'
+import { QInput } from 'quasar'
 
 type Message = {
     text: string;
@@ -96,6 +99,7 @@ type GptMessage = {
 export default defineComponent({
     name: 'IndexPage',
     setup() {
+        const inputCom = ref(QInput)
         let DisplayMessages = ref<Message[]>([])
         let InputText = ref('')
         let waitText = ref('')
@@ -149,7 +153,7 @@ export default defineComponent({
         }
 
         async function StreamChat() {
-            if (InputText.value == "" || Loading.value || Waiting.value) {
+            if (InputText.value == "") {
                 return
             }
 
@@ -205,6 +209,7 @@ export default defineComponent({
                         sent: false,
                         text: waitText.value
                     })
+                    inputCom.value.focus()
                     break
                 }
             }
@@ -260,7 +265,8 @@ export default defineComponent({
             AuthRequire,
             Auth,
             meImg,
-            aiImg
+            aiImg,
+            inputCom
         }
     },
 });
