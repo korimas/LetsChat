@@ -57,6 +57,7 @@
             <div class="row justify-center" >
                 <div class="row justify-center" style="width: 100%; max-width: 800px">
                     <q-input
+                        autofocus
                         ref="inputCom"
                         square
                         class="col-10"
