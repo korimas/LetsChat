@@ -1,14 +1,14 @@
 // import {Dialog} from 'quasar'
-import type {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
-import axios from "axios";
-import {Dialog} from "quasar";
+import type {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios from 'axios';
+import {Dialog} from 'quasar';
 
 // 导出Request类，可以用来自定义传递配置来创建实例
 export class Request {
   // axios 实例
   instance: AxiosInstance;
   // 基础配置，url和超时时间
-  baseConfig: AxiosRequestConfig = {baseURL: "/api", timeout: 60000};
+  baseConfig: AxiosRequestConfig = {baseURL: '/api', timeout: 60000};
 
   // 类构造函数
   constructor(config: AxiosRequestConfig) {
@@ -39,7 +39,7 @@ export class Request {
         // 系统如果有自定义code也可以在这里处理
         if (!res.data.success) {
           Dialog.create({
-              title: "错误",
+              title: '错误',
               message: res.data.message
             });
         }
@@ -48,8 +48,8 @@ export class Request {
       (err: any) => {
         // 这里用来处理http常见错误，进行全局提示
         Dialog.create({
-          title: "错误",
-          message: "请求异常，http status：" + err.response.status
+          title: '错误',
+          message: '请求异常，http status：' + err.response.status
         });
         // 这里是AxiosError类型，所以一般我们只reject我们需要的响应即可
         return Promise.reject(err.response);
@@ -64,13 +64,13 @@ export class Request {
 
   public CheckNeedAuth() {
     return this.instance.get(
-      "/auth",
+      '/auth',
       this.baseConfig);
   }
 
   public PasswordAuth(password: string) {
       return this.instance.post(
-          "/auth",
+          '/auth',
           {password: password},
           this.baseConfig);
   }

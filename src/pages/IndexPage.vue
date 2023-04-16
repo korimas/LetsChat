@@ -219,7 +219,7 @@ export default defineComponent({
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
 
-            if (scroller.verticalPosition < scrollPos) {
+            if (scroller.verticalPosition - scrollPos > 20) {
                 bottom = false
             } else {
                 if (!bottom) {
