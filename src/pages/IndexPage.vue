@@ -231,12 +231,12 @@ export default defineComponent({
             console.log("verticalSize: " + scroller.verticalSize)
             console.log("---------------------------------------------------------")
 
-            if (Math.abs(scroller.verticalPosition - scrollPos) < 25) {
+            if (Math.abs(scroller.verticalPosition - scrollPos) < 30) {
                 console.log("enter: " + (scroller.verticalPosition - scrollPos))
+                scrollPos = scroller.verticalPosition
                 scrollBottom()
             }
 
-            scrollPos = scroller.verticalPosition
         }
 
         function handleEnter(e: any) {
