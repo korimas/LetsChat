@@ -169,6 +169,7 @@ export default defineComponent({
             })
             InputText.value = ""
             waitText.value = ""
+            await nextTick()
             scrollBottom()
 
             // 流式聊天
@@ -224,17 +225,16 @@ export default defineComponent({
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
 
-            if (Waiting.value) {
-                console.log("verticalPosition: " + scroller.verticalPosition)
-                console.log("pre verticalPosition: " + scrollPos)
-                console.log("verticalPercentage: " + scroller.verticalPercentage)
-                console.log("verticalSize: " + scroller.verticalSize)
-                console.log("---------------------------------------------------------")
+            console.log("verticalPosition: " + scroller.verticalPosition)
+            console.log("pre verticalPosition: " + scrollPos)
+            console.log("verticalPercentage: " + scroller.verticalPercentage)
+            console.log("verticalSize: " + scroller.verticalSize)
+            console.log("---------------------------------------------------------")
 
-                if (scroller.verticalPosition - scrollPos < 20) {
-                    scrollBottom()
-                }
+            if (Math.abs(scroller.verticalPosition - scrollPos) < 25) {
+                scrollBottom()
             }
+
             scrollPos = scroller.verticalPosition
         }
 
