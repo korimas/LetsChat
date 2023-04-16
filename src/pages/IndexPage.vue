@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue';
+import {defineComponent, ref, nextTick} from 'vue';
 import api from 'src/api/request'
 import { QInput } from 'quasar'
 
@@ -209,7 +209,9 @@ export default defineComponent({
                         sent: false,
                         text: waitText.value
                     })
-                    inputCom.value.focus()
+                    await nextTick(() => {
+                        inputCom.value.focus()
+                    });
                     break
                 }
             }
