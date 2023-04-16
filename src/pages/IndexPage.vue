@@ -219,23 +219,23 @@ export default defineComponent({
         }
 
         function scrollBottom() {
+            const scroller = scrollAreaRef.value.getScroll()
+            scrollPos = scroller.verticalPosition
             scrollAreaRef.value.setScrollPercentage('vertical', 1)
         }
 
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
-
             console.log("verticalPosition: " + scroller.verticalPosition)
             console.log("pre verticalPosition: " + scrollPos)
             console.log("verticalPercentage: " + scroller.verticalPercentage)
             console.log("verticalSize: " + scroller.verticalSize)
-            console.log("---------------------------------------------------------")
 
             if (Math.abs(scroller.verticalPosition - scrollPos) < 30) {
                 console.log("enter: " + (scroller.verticalPosition - scrollPos))
-                scrollPos = scroller.verticalPosition
                 scrollBottom()
             }
+            console.log("---------------------------------------------------------")
 
         }
 
