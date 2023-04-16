@@ -59,7 +59,6 @@
                     <q-input
                         square
                         class="col-10"
-                        :disable="Loading || Waiting"
                         @keydown.enter="handleEnter"
                         filled autogrow bg-color="grey"
                         v-model="InputText"
@@ -118,7 +117,7 @@ export default defineComponent({
 
         DisplayMessages.value.push({
             sent: false,
-            text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型，采用ServerLess部署。"
+            text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型。"
         })
         DisplayMessages.value.push({
             sent: false,
@@ -150,7 +149,7 @@ export default defineComponent({
         }
 
         async function StreamChat() {
-            if (InputText.value == "") {
+            if (InputText.value == "" || Loading.value || Waiting.value) {
                 return
             }
 
