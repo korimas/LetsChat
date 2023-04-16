@@ -219,7 +219,6 @@ export default defineComponent({
 
         function scrollBottom() {
             scrollAreaRef.value.setScrollPercentage('vertical', 1)
-            bottom = true
         }
 
         function autoScroll() {
@@ -227,10 +226,11 @@ export default defineComponent({
 
             if (Waiting.value) {
                 console.log("verticalPosition: " + scroller.verticalPosition)
-                console.log("pre verticalPosition: " + scroller.verticalPosition)
+                console.log("pre verticalPosition: " + scrollPos)
                 console.log("verticalPercentage: " + scroller.verticalPercentage)
                 console.log("verticalSize: " + scroller.verticalSize)
-                console.log()
+                console.log("---------------------------------------------------------")
+
                 if (scroller.verticalPosition - scrollPos < 20) {
                     scrollBottom()
                 }
