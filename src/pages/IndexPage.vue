@@ -243,4 +243,29 @@ export default defineComponent({
             if (!e.ctrlKey) {
                 StreamChat()
             } else {
-        
+                InputText.value = InputText.value + "\n"
+            }
+        }
+
+        return {
+            handleEnter,
+            StreamChat,
+            autoScroll,
+            scrollAreaRef,
+            chatContentRef,
+            InputText,
+            waitText,
+            Password,
+            DisplayMessages,
+            Loading,
+            Waiting,
+            AuthFinish,
+            AuthRequire,
+            Auth,
+            meImg,
+            aiImg,
+            inputCom
+        }
+    },
+});
+</script>
