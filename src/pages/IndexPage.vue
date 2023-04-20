@@ -228,7 +228,7 @@ export default defineComponent({
             const chatContent = chatContentRef.value
 
             console.log("chatContentHeight: " + chatContent.clientHeight)
-            console.log("ScrollPosition: " + scroller.getScrollPosition())
+            console.log("verticalPosition: " + scroller.verticalPosition)
             console.log("verticalSize: " + scroller.verticalSize)
             console.log("verticalContainerSize: " + scroller.verticalContainerSize)
             console.log("horizontalSize: " + scroller.horizontalSize)
@@ -243,29 +243,4 @@ export default defineComponent({
             if (!e.ctrlKey) {
                 StreamChat()
             } else {
-                InputText.value = InputText.value + "\n"
-            }
-        }
-
-        return {
-            handleEnter,
-            StreamChat,
-            autoScroll,
-            scrollAreaRef,
-            chatContentRef,
-            InputText,
-            waitText,
-            Password,
-            DisplayMessages,
-            Loading,
-            Waiting,
-            AuthFinish,
-            AuthRequire,
-            Auth,
-            meImg,
-            aiImg,
-            inputCom
-        }
-    },
-});
-</script>
+        
