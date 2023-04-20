@@ -228,8 +228,11 @@ export default defineComponent({
             const chatContent = chatContentRef.value
 
             console.log("chatContentHeight: " + chatContent.clientHeight)
-            console.log("ScrollPosition: " + scroller.getScrollPosition)
-            console.log("scrollHeight: " + scroller.getScrollHeight())
+            console.log("ScrollPosition: " + scroller.getScrollPosition())
+            console.log("verticalSize: " + scroller.verticalSize)
+            console.log("verticalContainerSize: " + scroller.verticalContainerSize)
+            console.log("horizontalSize: " + scroller.horizontalSize)
+            console.log("horizontalContainerSize: " + scroller.horizontalContainerSize)
             console.log("verticalPercentage: " + scroller.verticalPercentage)
 
             console.log("---------------------------------------------------------")
