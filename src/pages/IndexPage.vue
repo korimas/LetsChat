@@ -233,7 +233,7 @@ export default defineComponent({
 
             console.log("---------------------------------------------------------")
 
-            if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 30) {
+            if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
                 scrollBottom()
             }
 
