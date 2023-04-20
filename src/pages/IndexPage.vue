@@ -22,7 +22,7 @@
 
             <!--聊天内容-->
             <q-scroll-area style="height: calc(100vh - 148px);" ref="scrollAreaRef" @scroll="autoScroll">
-                <div class="row justify-center" ref="chatContentRef">
+                <div class="row justify-center">
                     <div style="width: 100%; max-width: 800px;">
                         <q-chat-message
                             style="white-space: pre-wrap;"
@@ -112,7 +112,6 @@ export default defineComponent({
         let Password = ref('')
 
         const scrollAreaRef = ref()
-        const chatContentRef = ref()
 
         let scrollSize = -1
         let scrollPos = 0
@@ -225,9 +224,6 @@ export default defineComponent({
 
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
-            const chatContent = chatContentRef.value
-
-            console.log("chatContentHeight: " + chatContent.clientHeight)
             console.log("verticalPosition: " + scroller.verticalPosition)
             console.log("verticalSize: " + scroller.verticalSize)
             console.log("verticalContainerSize: " + scroller.verticalContainerSize)
@@ -236,6 +232,10 @@ export default defineComponent({
             console.log("verticalPercentage: " + scroller.verticalPercentage)
 
             console.log("---------------------------------------------------------")
+
+            if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 30) {
+                scrollBottom()
+            }
 
         }
 
@@ -252,7 +252,6 @@ export default defineComponent({
             StreamChat,
             autoScroll,
             scrollAreaRef,
-            chatContentRef,
             InputText,
             waitText,
             Password,
