@@ -115,7 +115,7 @@ export default defineComponent({
 
         let scrollSize = -1
         let scrollPos = 0
-        let bottom = true
+        let needBottom = true
 
         const meImg = './imgs/me.jpg'
         const aiImg = './imgs/ai.png'
@@ -188,6 +188,7 @@ export default defineComponent({
                 })
             })
 
+            scrollBottom()
             const reader = response.body!.getReader()
             const decoder = new TextDecoder('utf-8')
 
@@ -233,6 +234,12 @@ export default defineComponent({
 
             console.log("---------------------------------------------------------")
 
+            if (needBottom) {
+                scrollBottom()
+                needBottom = false
+                return
+            }
+
             if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
                 scrollBottom()
             }
@@ -241,6 +248,11 @@ export default defineComponent({
 
         function handleEnter(e: any) {
             if (!e.ctrlKey) {
+                const scroller = scrollAreaRef.value.getScroll()
+                if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
+                    needBottom=true
+                }
+
                 StreamChat()
             } else {
                 InputText.value = InputText.value + "\n"
