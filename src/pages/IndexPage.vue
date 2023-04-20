@@ -22,7 +22,7 @@
 
             <!--聊天内容-->
             <q-scroll-area style="height: calc(100vh - 148px);" ref="scrollAreaRef" @scroll="autoScroll">
-                <div class="row justify-center">
+                <div class="row justify-center" ref="chatContentRef">
                     <div style="width: 100%; max-width: 800px;">
                         <q-chat-message
                             style="white-space: pre-wrap;"
@@ -112,6 +112,7 @@ export default defineComponent({
         let Password = ref('')
 
         const scrollAreaRef = ref()
+        const chatContentRef = ref()
 
         let scrollSize = -1
         let scrollPos = 0
@@ -219,22 +220,18 @@ export default defineComponent({
         }
 
         function scrollBottom() {
-            const scroller = scrollAreaRef.value.getScroll()
-            scrollPos = scroller.verticalPosition
             scrollAreaRef.value.setScrollPercentage('vertical', 1)
         }
 
         function autoScroll() {
             const scroller = scrollAreaRef.value.getScroll()
-            console.log("verticalPosition: " + scroller.verticalPosition)
-            console.log("pre verticalPosition: " + scrollPos)
-            console.log("verticalPercentage: " + scroller.verticalPercentage)
-            console.log("verticalSize: " + scroller.verticalSize)
+            const chatContent = chatContentRef.value
 
-            if (Math.abs(scroller.verticalPosition - scrollPos) < 30) {
-                console.log("enter: " + (scroller.verticalPosition - scrollPos))
-                scrollBottom()
-            }
+            console.log("chatContentHeight: " + chatContent.clientHeight)
+            console.log("ScrollPosition: " + scroller.getScrollPosition)
+            console.log("scrollHeight: " + scroller.getScrollHeight())
+            console.log("verticalPercentage: " + scroller.verticalPercentage)
+
             console.log("---------------------------------------------------------")
 
         }
@@ -252,6 +249,7 @@ export default defineComponent({
             StreamChat,
             autoScroll,
             scrollAreaRef,
+            chatContentRef,
             InputText,
             waitText,
             Password,
