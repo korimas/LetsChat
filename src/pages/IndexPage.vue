@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, nextTick, onBeforeUnmount, onMounted, ref, Ref} from 'vue';
+import {watch, defineComponent, nextTick, onBeforeUnmount, onMounted, ref, Ref} from 'vue';
 import api from 'src/api/request'
 import {QInput} from 'quasar'
 
@@ -276,9 +276,17 @@ export default defineComponent({
             }
         };
 
+        watch(AuthFinish, async (newValue: boolean) => {
+            if (newValue) {
+                await nextTick(); // 等待DOM更新
+                if (chatContentRef.value && resizeObserver) {
+                    resizeObserver.observe(chatContentRef.value);
+                }
+            }
+        });
+
         onMounted(() => {
             resizeObserver = new ResizeObserver(onResize);
-            resizeObserver.observe(chatContentRef.value);
         });
 
         onBeforeUnmount(() => {
