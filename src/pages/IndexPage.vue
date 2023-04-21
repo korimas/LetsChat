@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, nextTick, onBeforeUnmount, onMounted, ref} from 'vue';
+import {defineComponent, nextTick, onBeforeUnmount, onMounted, ref, Ref} from 'vue';
 import api from 'src/api/request'
 import {QInput} from 'quasar'
 
@@ -112,7 +112,7 @@ export default defineComponent({
 
         const inputCom = ref(QInput)
         const scrollAreaRef = ref()
-        const chatContentRef = ref()
+        const chatContentRef:Ref<HTMLElement | null> = ref(null);
 
         let scrollSize = -1
         let scrollPos = 0
@@ -123,7 +123,7 @@ export default defineComponent({
 
         let resizeObserver: ResizeObserver | null = null;
         let lastHeight: number | null = null;
-        
+
         DisplayMessages.value.push({
             sent: false,
             text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型。"
