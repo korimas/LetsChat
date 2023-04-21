@@ -268,8 +268,15 @@ export default defineComponent({
                 const currentHeight = entry.contentRect.height;
 
                 if (lastHeight === null || currentHeight !== lastHeight) {
-                    console.log(`Div height changed: ${currentHeight}`);
                     // 在这里处理高度变化的逻辑
+                    const scroller = scrollAreaRef.value.getScroll()
+                    console.log(`Div height changed: ${currentHeight}`);
+                    console.log("verticalPosition: " + scroller.verticalPosition)
+                    console.log("verticalSize: " + scroller.verticalSize)
+                    console.log("verticalContainerSize: " + scroller.verticalContainerSize)
+                    if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
+                        scrollBottom()
+                    }
                 }
 
                 lastHeight = currentHeight;
@@ -298,7 +305,6 @@ export default defineComponent({
         return {
             handleEnter,
             StreamChat,
-            autoScroll,
             scrollAreaRef,
             chatContentRef,
             InputText,
