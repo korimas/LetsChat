@@ -8,7 +8,7 @@
                 </q-card-section>
 
                 <q-card-section class="q-pt-none">
-                    <q-input dense type="password" v-model="Password" autofocus @keyup.enter="Auth" />
+                    <q-input dense type="password" v-model="Password" autofocus @keyup.enter="Auth"/>
                     <p class="text-grey text-right">Note: My company name.</p>
                 </q-card-section>
 
@@ -21,8 +21,8 @@
         <div class="q-pa-md column no-wrap" v-if="AuthFinish">
 
             <!--聊天内容-->
-            <q-scroll-area style="height: calc(100vh - 148px);" ref="scrollAreaRef" @scroll="autoScroll">
-                <div class="row justify-center">
+            <q-scroll-area style="height: calc(100vh - 148px);" ref="scrollAreaRef">
+                <div class="row justify-center" ref="chatContentRef">
                     <div style="width: 100%; max-width: 800px;">
                         <q-chat-message
                             style="white-space: pre-wrap;"
@@ -54,7 +54,7 @@
             </q-scroll-area>
 
             <!--输入框-->
-            <div class="row justify-center" >
+            <div class="row justify-center">
                 <div class="row justify-center" style="width: 100%; max-width: 800px">
                     <q-input
                         autofocus
@@ -83,9 +83,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, nextTick} from 'vue';
+import {defineComponent, nextTick, onBeforeUnmount, onMounted, ref} from 'vue';
 import api from 'src/api/request'
-import { QInput } from 'quasar'
+import {QInput} from 'quasar'
 
 type Message = {
     text: string;
@@ -100,7 +100,6 @@ type GptMessage = {
 export default defineComponent({
     name: 'IndexPage',
     setup() {
-        const inputCom = ref(QInput)
         let DisplayMessages = ref<Message[]>([])
         let InputText = ref('')
         let waitText = ref('')
@@ -111,7 +110,9 @@ export default defineComponent({
         let AuthRequire = ref(true)
         let Password = ref('')
 
+        const inputCom = ref(QInput)
         const scrollAreaRef = ref()
+        const chatContentRef = ref()
 
         let scrollSize = -1
         let scrollPos = 0
@@ -120,6 +121,9 @@ export default defineComponent({
         const meImg = './imgs/me.jpg'
         const aiImg = './imgs/ai.png'
 
+        let resizeObserver: ResizeObserver | null = null;
+        let lastHeight: number | null = null;
+        
         DisplayMessages.value.push({
             sent: false,
             text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型。"
@@ -146,7 +150,7 @@ export default defineComponent({
 
         function Auth() {
             api.PasswordAuth(Password.value).then(response => {
-                if (response.data.success){
+                if (response.data.success) {
                     AuthFinish.value = true
                     AuthRequire.value = false
                 }
@@ -250,7 +254,7 @@ export default defineComponent({
             if (!e.ctrlKey) {
                 const scroller = scrollAreaRef.value.getScroll()
                 if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
-                    needBottom=true
+                    needBottom = true
                 }
 
                 StreamChat()
@@ -259,11 +263,36 @@ export default defineComponent({
             }
         }
 
+        const onResize = (entries: any) => {
+            for (const entry of entries) {
+                const currentHeight = entry.contentRect.height;
+
+                if (lastHeight === null || currentHeight !== lastHeight) {
+                    console.log(`Div height changed: ${currentHeight}`);
+                    // 在这里处理高度变化的逻辑
+                }
+
+                lastHeight = currentHeight;
+            }
+        };
+
+        onMounted(() => {
+            resizeObserver = new ResizeObserver(onResize);
+            resizeObserver.observe(chatContentRef.value);
+        });
+
+        onBeforeUnmount(() => {
+            if (resizeObserver) {
+                resizeObserver.disconnect();
+            }
+        });
+
         return {
             handleEnter,
             StreamChat,
             autoScroll,
             scrollAreaRef,
+            chatContentRef,
             InputText,
             waitText,
             Password,
