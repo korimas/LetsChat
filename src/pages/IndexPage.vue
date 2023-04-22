@@ -240,9 +240,10 @@ export default defineComponent({
                     console.log("verticalPosition: " + scroller.verticalPosition)
                     console.log("verticalSize: " + scroller.verticalSize)
                     console.log("verticalContainerSize: " + scroller.verticalContainerSize)
+                    console.log("percent: " + scroller.verticalPercentage)
                     await nextTick()
                     console.log(scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition )
-                    if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
+                    if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 100) {
                         scrollBottom()
                     }
                 }
