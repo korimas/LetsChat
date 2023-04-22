@@ -223,40 +223,13 @@ export default defineComponent({
             }
         }
 
-        function scrollBottom() {
+        async function scrollBottom() {
+            await nextTick()
             scrollAreaRef.value.setScrollPercentage('vertical', 1)
-        }
-
-        function autoScroll() {
-            const scroller = scrollAreaRef.value.getScroll()
-            console.log("verticalPosition: " + scroller.verticalPosition)
-            console.log("verticalSize: " + scroller.verticalSize)
-            console.log("verticalContainerSize: " + scroller.verticalContainerSize)
-            console.log("horizontalSize: " + scroller.horizontalSize)
-            console.log("horizontalContainerSize: " + scroller.horizontalContainerSize)
-            console.log("verticalPercentage: " + scroller.verticalPercentage)
-
-            console.log("---------------------------------------------------------")
-
-            if (needBottom) {
-                scrollBottom()
-                needBottom = false
-                return
-            }
-
-            if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
-                scrollBottom()
-            }
-
         }
 
         function handleEnter(e: any) {
             if (!e.ctrlKey) {
-                const scroller = scrollAreaRef.value.getScroll()
-                if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
-                    needBottom = true
-                }
-
                 StreamChat()
             } else {
                 InputText.value = InputText.value + "\n"
