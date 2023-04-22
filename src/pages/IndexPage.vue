@@ -114,28 +114,24 @@ export default defineComponent({
         const scrollAreaRef = ref()
         const chatContentRef:Ref<HTMLElement | null> = ref(null);
 
-        let scrollSize = -1
-        let scrollPos = 0
-        let needBottom = true
-
         const meImg = './imgs/me.jpg'
         const aiImg = './imgs/ai.png'
 
         let resizeObserver: ResizeObserver | null = null;
         let lastHeight: number | null = null;
 
-        DisplayMessages.value.push({
-            sent: false,
-            text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型。"
-        })
-        DisplayMessages.value.push({
-            sent: false,
-            text: "向聊天框发送信息即可与我聊天，我可以回答问题，写代码、写文章等等"
-        })
-        DisplayMessages.value.push({
-            sent: false,
-            text: "使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
-        })
+        // DisplayMessages.value.push({
+        //     sent: false,
+        //     text: "Hello，我是OpenAI小助手，基于gpt-3.5-turbo模型。"
+        // })
+        // DisplayMessages.value.push({
+        //     sent: false,
+        //     text: "向聊天框发送信息即可与我聊天，我可以回答问题，写代码、写文章等等"
+        // })
+        // DisplayMessages.value.push({
+        //     sent: false,
+        //     text: "使用过程中有任何问题可联系：zpzhou.ok@gmail.com"
+        // })
 
         checkAuth()
 
@@ -173,8 +169,6 @@ export default defineComponent({
             })
             InputText.value = ""
             waitText.value = ""
-            await nextTick()
-            scrollBottom()
 
             // 流式聊天
             Loading.value = true
@@ -192,7 +186,6 @@ export default defineComponent({
                 })
             })
 
-            scrollBottom()
             const reader = response.body!.getReader()
             const decoder = new TextDecoder('utf-8')
 
@@ -236,7 +229,7 @@ export default defineComponent({
             }
         }
 
-        const onResize = (entries: any) => {
+        const onResize = async (entries: any) => {
             for (const entry of entries) {
                 const currentHeight = entry.contentRect.height;
 
@@ -247,6 +240,7 @@ export default defineComponent({
                     console.log("verticalPosition: " + scroller.verticalPosition)
                     console.log("verticalSize: " + scroller.verticalSize)
                     console.log("verticalContainerSize: " + scroller.verticalContainerSize)
+                    await nextTick()
                     if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
                         scrollBottom()
                     }
