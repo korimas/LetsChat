@@ -241,6 +241,7 @@ export default defineComponent({
                     console.log("verticalSize: " + scroller.verticalSize)
                     console.log("verticalContainerSize: " + scroller.verticalContainerSize)
                     await nextTick()
+                    console.log(scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition )
                     if (scroller.verticalSize - scroller.verticalContainerSize - scroller.verticalPosition < 120) {
                         scrollBottom()
                     }
