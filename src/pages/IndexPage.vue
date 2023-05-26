@@ -179,7 +179,8 @@ export default defineComponent({
                     'Authorization': 'Bearer ' + Password.value
                 },
                 body: JSON.stringify({
-                    "model": "gpt-3.5-turbo",
+                    //"model": "gpt-3.5-turbo",
+                    "model": "gpt-4",
                     "messages": TotalMessages.value,
                     "stream": true,
                     "temperature": 0.7,
